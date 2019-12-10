@@ -4,12 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.orderflowersapp.Common.Common;
 import com.example.orderflowersapp.Model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -54,6 +56,10 @@ public class LoginActivity extends AppCompatActivity {
 
                             if (user.getPassword().equals(edtPassword.getText().toString())) {
                                 Toast.makeText(LoginActivity.this, "Рады видеть Вас снова!", Toast.LENGTH_SHORT).show();
+                                Intent homeIntent= new Intent(LoginActivity.this, HomeActivity.class);
+                                Common.currentUser = user;
+                                startActivity(homeIntent);
+                                finish();
                             } else {
                                 Toast.makeText(LoginActivity.this, "Неверно введен пароль", Toast.LENGTH_SHORT).show();
                             }
