@@ -1,5 +1,6 @@
 package com.example.orderflowersapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.orderflowersapp.Common.Common;
@@ -41,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
 
     RecyclerView recycler_menu;
     RecyclerView.LayoutManager layoutManager;
-
+    FirebaseRecyclerAdapter<Category, MenuViewHolder> adapter;
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -98,8 +99,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void loadMenu() {
-        FirebaseRecyclerAdapter<Category, MenuViewHolder> adapter =
-                new FirebaseRecyclerAdapter<Category, MenuViewHolder>(Category.class, R.layout.menu_item,
+         adapter = new FirebaseRecyclerAdapter<Category, MenuViewHolder>(Category.class, R.layout.menu_item,
                         MenuViewHolder.class, category) {
             @Override
             protected void populateViewHolder(MenuViewHolder menuViewHolder, Category category, int i) {
@@ -110,7 +110,11 @@ public class HomeActivity extends AppCompatActivity {
                 menuViewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void OnClick(View view, int position, boolean isLongClick) {
-                        Toast.makeText(HomeActivity.this, ""+clickItem.getName(), Toast.LENGTH_SHORT).show();
+                        //Get Category ID and send it FLowerList ACtivity
+                        Intent flowerList = new Intent(HomeActivity.this, FlowerList.class);
+                        flowerList.putExtra("CategoryId", adapter.getRef(position).getKey());
+                        startActivity(flowerList);
+
                     }
                 });
             }

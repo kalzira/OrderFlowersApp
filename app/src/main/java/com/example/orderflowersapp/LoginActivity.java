@@ -55,19 +55,19 @@ public class LoginActivity extends AppCompatActivity {
                             User user = dataSnapshot.child(edtPhone.getText().toString()).getValue(User.class);
 
                             if (user.getPassword().equals(edtPassword.getText().toString())) {
-                                Toast.makeText(LoginActivity.this, "Рады видеть Вас снова!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "You are welcome", Toast.LENGTH_SHORT).show();
                                 Intent homeIntent= new Intent(LoginActivity.this, HomeActivity.class);
                                 Common.currentUser = user;
                                 startActivity(homeIntent);
                                 finish();
                             } else {
-                                Toast.makeText(LoginActivity.this, "Неверно введен пароль", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Wrong Password", Toast.LENGTH_SHORT).show();
                             }
 
                         }
                         else{
                             mDialog.dismiss();
-                            Toast.makeText(LoginActivity.this, "Неверено введен номер или Вы не зарегистрированы", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Pnone number is incorrect or already registered", Toast.LENGTH_SHORT).show();
                         }
                     }
 

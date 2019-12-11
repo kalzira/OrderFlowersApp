@@ -4,12 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.orderflowersapp.Common.Common;
 import com.example.orderflowersapp.Model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,13 +52,14 @@ public class SignUpActivity extends AppCompatActivity {
                         //Check if this number already exists
                         if(dataSnapshot.child(edtPhone.getText().toString()).exists()){
                             mDialog.dismiss();
-                            Toast.makeText(SignUpActivity.this, "Введенный номер уже зарегистрирован", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpActivity.this, "User with number already registered", Toast.LENGTH_SHORT).show();
                         }
                         else{
                             mDialog.dismiss();
                             User user = new User(edtName.getText().toString(), edtPassword.getText().toString());
                             table_user.child(edtPhone.getText().toString()).setValue(user);
-                            Toast.makeText(SignUpActivity.this, "Добро пожаловать!", Toast.LENGTH_SHORT).show();
+                            Intent loginIntent= new Intent(SignUpActivity.this, LoginActivity.class);
+                            startActivity(loginIntent);
                             finish();
                         }
 
