@@ -43,15 +43,16 @@ public class Database extends SQLiteAssetHelper {
             }
             while(c.moveToNext());
         }
+        c.close();
         return result;
     }
 
     public void addToCart(Order order){
         SQLiteDatabase db = getReadableDatabase();
-        String query = String.format("INSERT INTO OrderDetail(ProductId,ProductName,Quantity,Price,Discount) VALUES('$s','$s','$s','$s','$s');",
+        String query = String.format("INSERT INTO OrderDetail(ProductId,ProductName,Quantity,Price,Discount) VALUES('%s','%s','%s','%s','%s');",
                 order.getProductId(),
                 order.getProductName(),
-                order.getQuatity(),
+                order.getQuantity(),
                 order.getPrice(),
                 order.getDiscount());
 
@@ -59,7 +60,7 @@ public class Database extends SQLiteAssetHelper {
     }
     public void CleanCart(){
         SQLiteDatabase db = getReadableDatabase();
-        String query = String.format("DELETE FROM OrderDetail ");
+        String query = String.format("DELETE FROM OrderDetail");
 
         db.execSQL(query);
 

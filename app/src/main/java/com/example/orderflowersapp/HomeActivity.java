@@ -35,6 +35,8 @@ import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import static com.example.orderflowersapp.Common.Common.currentUser;
+
 public class HomeActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference category;
@@ -66,8 +68,10 @@ public class HomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                //Open Cart Activity
+                Intent cartIntent = new Intent(HomeActivity.this, Cart.class);
+                startActivity(cartIntent);
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -86,7 +90,7 @@ public class HomeActivity extends AppCompatActivity {
         //Set name
         View headerView = navigationView.getHeaderView(0);
         txtFullName = headerView.findViewById(R.id.txtFullName);
-        txtFullName.setText(Common.currentUser.getName());
+        txtFullName.setText(currentUser.getName());
 
         //Load menu
         recycler_menu = findViewById(R.id.recycler_menu);
