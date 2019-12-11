@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="@color/whiteTransparent"
-        android:text="Зарегистрироваться"
+        android:text="Sign up"
         android:layout_margin="10dp"
         android:textColor="@color/blackTransparent"
         app:layout_constraintBottom_toBottomOf="parent"

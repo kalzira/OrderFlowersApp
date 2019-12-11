@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -67,7 +68,10 @@ public class FlowerList extends AppCompatActivity {
                 flowerViewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void OnClick(View view, int position, boolean isLongClick) {
-                        Toast.makeText(FlowerList.this, ""+local.getName(), Toast.LENGTH_SHORT).show();
+                       //Open detail of flower item
+                        Intent flowerDetail = new Intent(FlowerList.this, FlowerDetail.class);
+                        flowerDetail.putExtra("FlowerId",adapter.getRef(position).getKey());
+                        startActivity(flowerDetail);
                     }
                 });
             }
