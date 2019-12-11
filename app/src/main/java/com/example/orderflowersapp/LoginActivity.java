@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                             mDialog.dismiss();
                             User user = dataSnapshot.child(edtPhone.getText().toString()).getValue(User.class);
 
+                            user.setPhone(edtPhone.getText().toString()); //Set Phone
                             if (user.getPassword().equals(edtPassword.getText().toString())) {
                                 Toast.makeText(LoginActivity.this, "You are welcome", Toast.LENGTH_SHORT).show();
                                 Intent homeIntent= new Intent(LoginActivity.this, HomeActivity.class);

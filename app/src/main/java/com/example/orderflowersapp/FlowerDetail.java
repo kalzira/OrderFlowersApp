@@ -4,11 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
+import com.example.orderflowersapp.Database.Database;
 import com.example.orderflowersapp.Model.Flower;
+import com.example.orderflowersapp.Model.Order;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +33,8 @@ public class FlowerDetail extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference flowers;
     String flowerId ="";
+
+    Flower currentFlower;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +54,25 @@ public class FlowerDetail extends AppCompatActivity {
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
 
+        btnCart = findViewById(R.id.btnCart);
+        numberButton=findViewById(R.id.number_button);
+
+        //Add Flower to Cart
+        btnCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Database(getBaseContext()).addToCart(new Order(
+                        flowerId,
+                        currentFlower.getName(),
+                        numberButton.getNumber(),
+                        currentFlower.getPrice(),
+                        currentFlower.getDiscount()
+                ));
+
+                Toast.makeText(FlowerDetail.this, "Added to Cart", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         //Get Flower Id from Intent
         //Get Intent
         if(getIntent()!= null){
@@ -62,16 +87,16 @@ public class FlowerDetail extends AppCompatActivity {
         flowers.child(flowerId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Flower flower = dataSnapshot.getValue(Flower.class);
+                currentFlower = dataSnapshot.getValue(Flower.class);
                 //Set Image
-                Picasso.with(getBaseContext()).load(flower.getImage())
+                Picasso.with(getBaseContext()).load(currentFlower.getImage())
                         .into(flower_image);
 
-                collapsingToolbarLayout.setTitle(flower.getName());
+                collapsingToolbarLayout.setTitle(currentFlower.getName());
 
-                flower_price.setText(flower.getPrice());
-                flower_name.setText(flower.getName());
-                flower_description.setText(flower.getDescription());
+                flower_price.setText(currentFlower.getPrice());
+                flower_name.setText(currentFlower.getName());
+                flower_description.setText(currentFlower.getDescription());
 
             }
 
