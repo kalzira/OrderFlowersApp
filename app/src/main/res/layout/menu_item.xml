@@ -13,7 +13,7 @@
         <ImageView
             android:id="@+id/menu_image"
             android:layout_width="match_parent"
-            android:src="@drawable/login_bg2"
+            android:src="@drawable/main_bg"
             android:scaleType="centerCrop"
             android:layout_height="match_parent">
         </ImageView>

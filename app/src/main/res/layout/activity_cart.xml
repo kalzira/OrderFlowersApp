@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Cart">
     <ImageView
-        android:src="@drawable/login_bg2"
+        android:src="@drawable/main_bg"
         android:scaleType="centerCrop"
         android:backgroundTint="@color/overlayBackground"
         android:layout_width="match_parent"
