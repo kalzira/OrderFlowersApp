@@ -52,7 +52,7 @@ public class SignUpActivity extends AppCompatActivity {
                         //Check if this number already exists
                         if(dataSnapshot.child(edtPhone.getText().toString()).exists()){
                             mDialog.dismiss();
-                            Toast.makeText(SignUpActivity.this, "User with number already registered", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpActivity.this, "Wrong password or phone number", Toast.LENGTH_SHORT).show();
                         }
                         else{
                             mDialog.dismiss();

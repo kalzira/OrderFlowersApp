@@ -55,20 +55,29 @@ public class LoginActivity extends AppCompatActivity {
                             User user = dataSnapshot.child(edtPhone.getText().toString()).getValue(User.class);
 
                             user.setPhone(edtPhone.getText().toString()); //Set Phone
-                            if (user.getPassword().equals(edtPassword.getText().toString())) {
+                            if((user.getPhone().equals("0000"))&&(user.getPassword().equals("admin"))){
+                                Intent homeIntent= new Intent(LoginActivity.this, HomeAdmin.class);
+//                                homeIntent.putExtra("AdminId","AdminId");
+                                Common.currentUser = user;
+                                startActivity(homeIntent);
+                                finish();
+                            }
+                            else if (!user.getPhone().equals("0000") && !user.getPassword().equals("admin")&& (user.getPassword().equals(edtPassword.getText().toString()))) {
                                 Toast.makeText(LoginActivity.this, "You are welcome", Toast.LENGTH_SHORT).show();
                                 Intent homeIntent= new Intent(LoginActivity.this, HomeActivity.class);
                                 Common.currentUser = user;
                                 startActivity(homeIntent);
                                 finish();
-                            } else {
+                            }
+
+                            else {
                                 Toast.makeText(LoginActivity.this, "Wrong Password", Toast.LENGTH_SHORT).show();
                             }
 
                         }
                         else{
                             mDialog.dismiss();
-                            Toast.makeText(LoginActivity.this, "Pnone number is incorrect or already registered", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Pnone number is incorrect", Toast.LENGTH_SHORT).show();
                         }
                     }
 

@@ -3,10 +3,9 @@ package com.example.orderflowersapp;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.orderflowersapp.Common.Common;
 import com.example.orderflowersapp.Interface.ItemClickListener;
 import com.example.orderflowersapp.Model.Category;
-import com.example.orderflowersapp.Model.User;
+import com.example.orderflowersapp.ViewHolder.MenuAdminViewHolder;
 import com.example.orderflowersapp.ViewHolder.MenuViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,11 +23,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -39,20 +35,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
-
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import static com.example.orderflowersapp.Common.Common.currentUser;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class HomeAdmin extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     FirebaseDatabase database;
     DatabaseReference category;
     TextView txtFullName;
 
     RecyclerView recycler_menu;
     RecyclerView.LayoutManager layoutManager;
-    FirebaseRecyclerAdapter<Category, MenuViewHolder> adapter;
+    FirebaseRecyclerAdapter<Category, MenuAdminViewHolder> adapter;
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -64,10 +59,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_home_admin);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Catalog");
+        Toolbar toolbar = findViewById(R.id.toolbarAdmin);
+        toolbar.setTitle("Catalog Management");
         setSupportActionBar(toolbar);
 
 
@@ -80,29 +75,25 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
 
-                //Open Cart Activity
-                Intent cartIntent = new Intent(HomeActivity.this, Cart.class);
-                startActivity(cartIntent);
+
             }
         });
-
-        fab.setImageResource(R.drawable.ic_add_black_24dp);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_admin_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_admin);
         navigationView.setNavigationItemSelectedListener(this);
 
         //Set name
         View headerView = navigationView.getHeaderView(0);
-        txtFullName = headerView.findViewById(R.id.txtFullName);
-        txtFullName.setText(currentUser.getName());
+        txtFullName = headerView.findViewById(R.id.txtFullNameAdmin);
+        txtFullName.setText("Admin");
 
         //Load menu
-        recycler_menu = findViewById(R.id.recycler_menu);
+        recycler_menu = findViewById(R.id.recycler_menuAdmin);
         recycler_menu.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recycler_menu.setLayoutManager(layoutManager);
@@ -116,32 +107,25 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void loadMenu() {
-         adapter = new FirebaseRecyclerAdapter<Category, MenuViewHolder>(Category.class, R.layout.menu_item,
-                        MenuViewHolder.class, category) {
+        adapter = new FirebaseRecyclerAdapter<Category, MenuAdminViewHolder>(Category.class,
+                R.layout.menu_admin_item,
+                MenuAdminViewHolder.class,
+                category) {
             @Override
-            protected void populateViewHolder(MenuViewHolder menuViewHolder, Category category, int i) {
-                menuViewHolder.txtMenuName.setText(category.getName());
+            protected void populateViewHolder(MenuAdminViewHolder menuAdminViewHolder, Category category, int i) {
+                menuAdminViewHolder.txtMenuName.setText(category.getName());
                 Picasso.with(getBaseContext()).load(category.getImage())
-                        .into(menuViewHolder.imageView);
-                final Category clickItem = category;
-                menuViewHolder.setItemClickListener(new ItemClickListener() {
-                    @Override
-                    public void OnClick(View view, int position, boolean isLongClick) {
-                        //Get Category ID and send it FLowerList ACtivity
-                        Intent flowerList = new Intent(HomeActivity.this, FlowerList.class);
-                        flowerList.putExtra("CategoryId", adapter.getRef(position).getKey());
-                        startActivity(flowerList);
-
-                    }
-                });
+                        .into(menuAdminViewHolder.imageView);
             }
         };
+        adapter.notifyDataSetChanged(); //Refresh data when changed
         recycler_menu.setAdapter(adapter);
     }
 
+
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_admin_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -157,20 +141,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_catalog) {
             // Handle the camera action
         } else if (id == R.id.nav_cart) {
-            Intent cartIntent = new Intent(HomeActivity.this,Cart.class);
-            startActivity(cartIntent);
+
 
         } else if (id == R.id.nav_log_out) {
-            Intent loginIntent = new Intent(HomeActivity.this, LoginActivity.class);
-            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(loginIntent);
+
 
         } else if (id == R.id.nav_orders) {
-            Intent orderIntent = new Intent(HomeActivity.this,OrderStatus.class);
-            startActivity(orderIntent);
+
 
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_admin_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
